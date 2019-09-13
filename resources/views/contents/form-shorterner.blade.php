@@ -10,8 +10,7 @@
 		<!-- Optional theme -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-		<!-- <link rel="stylesheet" href="{{ url('public/bootstrap/dist/css/bootstrap.min.css') }}"> -->
-		<!-- <link rel="stylesheet" href="{{ url('public/bootstrap/dist/css/bootstrap-theme.min.css') }}"> -->
+		<title>URL Shorterner | Tes EMC Group</title>
 
 		<link rel="stylesheet" href="{{ url('public/css/sweetalert.css') }}">
 
@@ -38,7 +37,7 @@
 			.hr-success{
 			  background-image: -webkit-linear-gradient(left, rgba(15,157,88,.8), rgba(15, 157, 88,.6), rgba(0,0,0,0));
 			}
-			#for-result{
+			#for-result1, #for-result2{
 				display: none;
 			}
 		</style>
@@ -61,8 +60,8 @@
 								</button>
 							</div>
 						</div>
-						<hr class="hr-success" id="for-result">
-						<div class="row" id="for-result">
+						<hr class="hr-success" id="for-result1">
+						<div class="row" id="for-result2">
 							<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
 								<label>Link baru Anda : </label><br>
 								<a href='#' id='new-link'></a>
@@ -75,8 +74,6 @@
 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-		<!-- <script src="{{ url('public/bootstrap/dist/js/bootstrap.min.js') }}"></script> -->
 
 		<script src="{{ url('public/jquery/jquery.js') }}"></script>
 		<script src="{{ url('public/jquery/jquery.min.js') }}"></script>
@@ -101,7 +98,8 @@
 		                	if(output_nya.code == "200"){
 		                		var new_link = output_nya.new_link;
 
-		                		$('#for-result').css('display','block');
+		                		$('#for-result1').css('display','block');
+		                		$('#for-result2').css('display','block');
 
 		                		$('#new-link').html(new_link);
 
@@ -113,7 +111,8 @@
 		                            type: "success",
 		                        });
 		                    }else{
-		                    	$('#for-result').css('display','none');
+		                    	$('#for-result1').css('display','none');
+		                    	$('#for-result2').css('display','none');
 
 		                    	$('#new-link').html("");
 

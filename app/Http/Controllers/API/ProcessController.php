@@ -9,19 +9,12 @@ use Carbon\Carbon;
 use Validator;
 use DB;
 use Response;
-use App\DataLinks;
+use App\DataLink;
 
 class ProcessController extends Controller
 {
     public function generate_new_link_randomly(Request $request){
-  //   	$validator = Validator::make($request->all(), [
-  //           'previous_link' => 'required|active_url',
-  //       ]);
-
-  //       if ($validator->fails()) {
-		// 	return Response::json(['code' => '402', 'status' => false, 'message' => $validator->errors()->all()], 200);
-		// }
-		if( empty($request->previous_link) ){
+    	if( empty($request->previous_link) ){
 			return Response::json(['code' => '444', 'status' => true,
 	            'message' => 'Link harus diisi'
 	        ], 200);
@@ -29,24 +22,23 @@ class ProcessController extends Controller
 
 		$previous_link = $request->previous_link;
 
-		if( 
-			!preg_match(
-		        "/^([a-zA-Z0-9][a-zA-Z0-9-_]*\.)*[a-zA-Z0-9]*[a-zA-Z0-9-_]*
-		        [[a-zA-Z0-9]+$/", $previous_link
-	    	)
-	    ){
-			return Response::json(['code' => '444', 'status' => true,
+    	$validator = Validator::make($request->all(), [
+            'previous_link' => 'active_url',
+        ]);
+
+        if ($validator->fails()) {
+				return Response::json(['code' => '444', 'status' => true,
 	            'message' => 'Link tidak valid'
 	        ], 200);
-	    }
+		}
 
-	    $cek_data = DataLinks::select('new_link')
+	    $cek_data = DataLink::select('new_link')
 	    	->where('previous_link', $previous_link)->first();
 	    if( !empty($cek_data) ){
 	    	$new_link = $cek_data->new_link;
 
-	    	return Response::json(['code' => '200', 'status' => true,
-	            'message' => 'Link sudah pernah terdaftar',
+	    	return Response::json(['code' => '444', 'status' => true,
+	            'message' => 'Link sudah pernah terdaftar, gunakan link lain',
 	            'previous_link' => $previous_link,
 	            'new_link' => $new_link
 	        ], 200);
@@ -58,10 +50,27 @@ class ProcessController extends Controller
 
 		    	$new_link = "https://emc.group/".$randoming;
 
-		    	$cek_new_link = DataLinks::where('new_link', $new_link)->first();
+		    	$cek_new_link = DataLink::where('new_link', $new_link)->first();
 
 		    	if( empty($cek_new_link) ){
 		    		$creating_new_link = false;
+		    		
+		    		try{
+		    			$time_now = Carbon::now();
+
+		    			$data = [
+			    			'previous_link' => $previous_link,
+			    			'new_link' => $new_link,
+			    			'created_at' => $time_now,
+			    			'updated_at' => $time_now,
+			    		];
+
+		    			DataLink::insert($data);
+
+		    		}catch(Exception $e){
+				    	report($e);
+				    	return false;
+				    }
 
 		    		return Response::json(['code' => '200', 'status' => true,
 			            'message' => 'Link baru berhasil dibuat',

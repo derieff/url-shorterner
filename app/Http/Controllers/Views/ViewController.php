@@ -14,7 +14,6 @@ use Response;
 class ViewController extends Controller
 {
     public function form_shorterner(Request $request){
-    	// Alert::success('Selamat Datang');
     	return view('contents.form-shorterner');
     }
 }
